@@ -161,7 +161,7 @@ export default function HomePageClient({ initialPdfs }: Props) {
                   </a>
                   <button
                     onClick={() => handleDelete(pdf.id)}
-                    className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition-colors duration-200"
+                    className="bg-red-600 text-white text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-red-700 transition-colors duration-200"
                   >
                     Delete
                   </button>
