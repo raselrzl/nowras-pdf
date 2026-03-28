@@ -39,7 +39,7 @@ export default function HomePageClient({ initialPdfs }: Props) {
     e.preventDefault();
     if (name === "Sikdar" && code === "Sikdar123") {
       setAuthenticated(true);
-      const expiresAt = new Date().getTime() + 5 * 60 * 1000; // 5 min
+      const expiresAt = new Date().getTime() + 720 * 60 * 1000; // 5 min
       localStorage.setItem("loginData", JSON.stringify({ expiresAt }));
     } else {
       alert("Wrong credentials");
