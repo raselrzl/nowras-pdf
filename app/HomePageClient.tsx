@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { UploadButton } from "./utils/uploadthing";
+import { Download } from "lucide-react";
 
 type Pdf = {
   id?: string;
@@ -127,9 +128,7 @@ export default function HomePageClient({ initialPdfs }: Props) {
               <th className="p-4 text-gray-100 font-medium uppercase tracking-wider text-xs">
                 Uploaded At
               </th>
-              <th className="p-4 text-gray-700 font-medium uppercase tracking-wider">
-                
-              </th>
+              <th className="p-4 text-gray-700 font-medium uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -146,7 +145,7 @@ export default function HomePageClient({ initialPdfs }: Props) {
                 className="hover:bg-gray-50 transition-colors duration-200"
               >
                 <td className="p-4 text-gray-800 font-semibold">{pdf.name}</td>
-                <td className="p-4 text-gray-600">
+                <td className="p-4 text-gray-600 text-sm">
                   {pdf.createdAt
                     ? new Date(pdf.createdAt).toLocaleString()
                     : "N/A"}
@@ -155,8 +154,9 @@ export default function HomePageClient({ initialPdfs }: Props) {
                   <a
                     href={pdf.url}
                     target="_blank"
-                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+                    className="flex items-center gap-1 mr-8 text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
                   >
+                    <Download className="w-4 h-4" />
                     View / Download
                   </a>
                   <button
