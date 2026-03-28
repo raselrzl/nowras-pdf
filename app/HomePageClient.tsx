@@ -81,52 +81,62 @@ export default function HomePageClient({ initialPdfs }: Props) {
   // Login UI
   if (!authenticated) {
     return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-  <form
-    onSubmit={handleLogin}
-    className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm flex flex-col items-center"
-  >
-    {/* Logo */}
-    <img
-      src="/logo.png" // Replace with your logo path
-      alt="Logo"
-      className="w-24 h-24 mb-6"
-    />
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+        <form
+          onSubmit={handleLogin}
+          className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm flex flex-col items-center"
+        >
+          {/* Logo */}
+          <img
+            src="/logo.png" // Replace with your logo path
+            alt="Logo"
+            className="w-24 h-24 mb-6"
+          />
 
-    <h1 className="text-3xl font-bold mb-6 text-gray-800">Login</h1>
+          <h1 className="text-3xl font-bold mb-6 text-gray-800">Login</h1>
 
-    <input
-      type="text"
-      placeholder="Name"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-    />
-    <input
-      type="password"
-      placeholder="Code"
-      value={code}
-      onChange={(e) => setCode(e.target.value)}
-      className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-    />
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          />
+          <input
+            type="password"
+            placeholder="Code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          />
 
-    <button className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors duration-200">
-      Login
-    </button>
-  </form>
-</div>
+          <button className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors duration-200">
+            Login
+          </button>
+        </form>
+      </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-10 flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-6">Upload PDF</h1>
+      {/* <h1 className="text-3xl font-bold mb-6">Upload PDF</h1>
       <UploadButton
         endpoint="pdfUploader"
         onClientUploadComplete={handleUploadComplete}
         onUploadError={(error) => alert(`Upload failed: ${error.message}`)}
         className="mb-6"
-      />
+      /> */}
+      {/* Sticky Upload Card */}
+      <div className="sticky top-4 z-50 w-full max-w-5xl bg-white p-6 rounded-xl shadow-md mx-auto mb-6">
+        <h1 className="text-3xl font-bold mb-4">Upload PDF</h1>
+        <UploadButton
+          endpoint="pdfUploader"
+          onClientUploadComplete={handleUploadComplete}
+          onUploadError={(error) => alert(`Upload failed: ${error.message}`)}
+          className="w-full"
+        />
+      </div>
       <div className="w-full max-w-5xl bg-white rounded-lg shadow-md overflow-x-auto">
         <table className="w-full min-w-150 text-left border-collapse">
           <thead className="bg-gray-800 border-b border-gray-300">
