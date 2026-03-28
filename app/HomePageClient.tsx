@@ -119,12 +119,12 @@ export default function HomePageClient({ initialPdfs }: Props) {
       />
       <div className="w-full max-w-5xl bg-white rounded-lg shadow-md overflow-x-auto">
         <table className="w-full min-w-150 text-left border-collapse">
-          <thead className="bg-gray-400 border-b border-gray-300">
+          <thead className="bg-gray-800 border-b border-gray-300">
             <tr>
-              <th className="p-4 text-gray-700 font-medium uppercase tracking-wider">
+              <th className="p-4 text-gray-100 uppercase tracking-wider font-bold">
                 File Name
               </th>
-              <th className="p-4 text-gray-700 font-medium uppercase tracking-wider">
+              <th className="p-4 text-gray-100 font-medium uppercase tracking-wider text-xs">
                 Uploaded At
               </th>
               <th className="p-4 text-gray-700 font-medium uppercase tracking-wider">
