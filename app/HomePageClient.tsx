@@ -46,7 +46,9 @@ export default function HomePageClient({ initialPdfs }: Props) {
   };
 
   // Upload handler
-  const handleUploadComplete = async (files: { name: string; url: string }[]) => {
+  const handleUploadComplete = async (
+    files: { name: string; url: string }[],
+  ) => {
     const res = await fetch("/api/savePdf", {
       method: "POST",
       body: JSON.stringify(files),
@@ -63,17 +65,17 @@ export default function HomePageClient({ initialPdfs }: Props) {
     setPdfs((prev) => [...formatted, ...prev]);
   };
 
- const handleDelete = async (id?: string) => {
-  if (!id) return;
-  if (!confirm("Are you sure you want to delete this PDF?")) return;
+  const handleDelete = async (id?: string) => {
+    if (!id) return;
+    if (!confirm("Are you sure you want to delete this PDF?")) return;
 
-  const res = await fetch(`/api/deletePdf/${id}`, { method: "DELETE" });
-  if (res.ok) {
-    setPdfs((prev) => prev.filter((p) => p.id !== id));
-  } else {
-    alert("Failed to delete PDF");
-  }
-};
+    const res = await fetch(`/api/deletePdf/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setPdfs((prev) => prev.filter((p) => p.id !== id));
+    } else {
+      alert("Failed to delete PDF");
+    }
+  };
 
   // Login UI
   if (!authenticated) {
@@ -115,42 +117,51 @@ export default function HomePageClient({ initialPdfs }: Props) {
         onUploadError={(error) => alert(`Upload failed: ${error.message}`)}
         className="mb-6"
       />
-      <div className="w-full max-w-4xl bg-white rounded shadow overflow-x-auto">
-        <table className="w-full text-left">
-          <thead className="bg-gray-200">
+      <div className="w-full max-w-5xl bg-white rounded-lg shadow-md overflow-x-auto">
+        <table className="w-full min-w-150 text-left border-collapse">
+          <thead className="bg-gray-400 border-b border-gray-300">
             <tr>
-              <th className="p-3 border-b">File Name</th>
-              <th className="p-3 border-b">Uploaded At</th>
-              <th className="p-3 border-b">Action</th>
+              <th className="p-4 text-gray-700 font-medium uppercase tracking-wider">
+                File Name
+              </th>
+              <th className="p-4 text-gray-700 font-medium uppercase tracking-wider">
+                Uploaded At
+              </th>
+              <th className="p-4 text-gray-700 font-medium uppercase tracking-wider">
+                
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-200">
             {pdfs.length === 0 && (
               <tr>
-                <td className="p-3 border-b text-center" colSpan={3}>
+                <td className="p-4 text-center text-gray-500" colSpan={3}>
                   No PDFs available
                 </td>
               </tr>
             )}
             {pdfs.map((pdf) => (
-              <tr key={pdf.id} className="hover:bg-gray-100">
-                <td className="p-3 border-b">{pdf.name}</td>
-                <td className="p-3 border-b">
+              <tr
+                key={pdf.id}
+                className="hover:bg-gray-50 transition-colors duration-200"
+              >
+                <td className="p-4 text-gray-800 font-semibold">{pdf.name}</td>
+                <td className="p-4 text-gray-600">
                   {pdf.createdAt
                     ? new Date(pdf.createdAt).toLocaleString()
                     : "N/A"}
                 </td>
-                <td className="p-3 border-b flex gap-3">
+                <td className="p-4 flex gap-3">
                   <a
                     href={pdf.url}
                     target="_blank"
-                    className="text-red-600 hover:underline"
+                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
                   >
                     View / Download
                   </a>
                   <button
                     onClick={() => handleDelete(pdf.id)}
-                    className="text-white bg-red-600 px-2 py-1 rounded hover:bg-red-700"
+                    className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition-colors duration-200"
                   >
                     Delete
                   </button>

@@ -40,7 +40,7 @@ export default function RootLayout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-        {children}
+       <div className="pt-20 bg-gray-100"> {children}</div>
       </body>
     </html>
   );

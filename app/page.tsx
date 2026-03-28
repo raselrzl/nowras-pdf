@@ -10,5 +10,9 @@ export default async function HomePage() {
     createdAt: p.createdAt.toISOString(),
   }));
 
-  return <HomePageClient initialPdfs={formattedPdfs} />;
+  return (
+    <div>
+      <HomePageClient initialPdfs={formattedPdfs} />
+    </div>
+  );
 }
