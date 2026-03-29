@@ -1,18 +1,17 @@
+// app/page.tsx (Server Component)
+
 import { getAllPdfs } from "./actions/pdfActions";
 import HomePageClient from "./HomePageClient";
 
-export default async function HomePage() {
-  const pdfs = await getAllPdfs(); // Prisma returns createdAt as Date
+export const dynamic = "force-dynamic"; // ✅ HERE (correct place)
 
-  // Convert createdAt to ISO string for the client
+export default async function HomePage() {
+  const pdfs = await getAllPdfs();
+
   const formattedPdfs = pdfs.map((p) => ({
     ...p,
     createdAt: p.createdAt.toISOString(),
   }));
 
-  return (
-    <div>
-      <HomePageClient initialPdfs={formattedPdfs} />
-    </div>
-  );
+  return <HomePageClient initialPdfs={formattedPdfs} />;
 }

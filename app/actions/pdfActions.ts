@@ -3,7 +3,18 @@ import { prisma } from "../utils/db";
 
 
 export async function getAllPdfs() {
-  return await prisma.pdf.findMany({ orderBy: { createdAt: "desc" } });
+  try {
+    const data = await prisma.pdf.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+
+    console.log("PDF DATA:", data); // 👈 مهم
+
+    return data;
+  } catch (error) {
+    console.error("DB ERROR:", error); // 👈 مهم
+    return [];
+  }
 }
 
 export async function savePdfs(files: { name: string; url: string }[]) {
