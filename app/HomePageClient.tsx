@@ -35,7 +35,7 @@ export default function HomePageClient({ initialPdfs }: Props) {
   }, []);
 
   // Login
-  const handleLogin = (e: React.FormEvent) => {
+/*   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (name === "Sikdar" && code === "Sikdar123") {
       setAuthenticated(true);
@@ -44,7 +44,22 @@ export default function HomePageClient({ initialPdfs }: Props) {
     } else {
       alert("Wrong credentials");
     }
-  };
+  }; */
+
+  const handleLogin = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const envName = process.env.NEXT_PUBLIC_LOGIN_NAME;
+  const envCode = process.env.NEXT_PUBLIC_LOGIN_CODE;
+
+  if (name === envName && code === envCode) {
+    setAuthenticated(true);
+    const expiresAt = new Date().getTime() + 720 * 60 * 1000; // 12 hours
+    localStorage.setItem("loginData", JSON.stringify({ expiresAt }));
+  } else {
+    alert("Wrong credentials");
+  }
+};
 
   // Upload handler
   const handleUploadComplete = async (
