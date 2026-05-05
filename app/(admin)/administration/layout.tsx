@@ -14,11 +14,11 @@ export default async function AdministrationLayout({
 
       {/* TOP NAV */}
       <header className="h-14 bg-white border-b flex items-center justify-between px-6">
-
-        <h1 className="font-semibold text-lg">Admin Panel</h1>
+        <h1 className="font-semibold text-lg">
+          School Administration
+        </h1>
 
         <div className="flex items-center gap-4 text-sm">
-
           <span className="text-gray-600">
             Welcome,{" "}
             <b className="text-black">
@@ -27,7 +27,6 @@ export default async function AdministrationLayout({
           </span>
 
           <LogoutButton />
-
         </div>
       </header>
 
@@ -41,24 +40,106 @@ export default async function AdministrationLayout({
             Administration
           </h2>
 
-          <nav className="flex flex-col gap-2">
+          <nav className="flex flex-col gap-2 text-sm">
 
+            {/* Dashboard */}
+            <Link
+              href="/administration"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Dashboard
+            </Link>
+
+            {/* User Management */}
             <Link
               href="/administration/createuser"
-              className="bg-gray-800 px-3 py-2 rounded-xs hover:bg-gray-700"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
             >
               Create User
             </Link>
 
             <Link
               href="/administration/users"
-              className="bg-gray-800 px-3 py-2 rounded-xs hover:bg-gray-700"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
             >
               All Users
             </Link>
 
-          </nav>
+            {/* Academic Management */}
+            <div className="mt-4 text-xs text-gray-400 uppercase">
+              Academic
+            </div>
 
+            <Link
+              href="/teachers"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Teachers
+            </Link>
+
+            <Link
+              href="/students"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Students
+            </Link>
+
+            <Link
+              href="/guardians"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Guardians
+            </Link>
+
+            {/* Finance */}
+            <div className="mt-4 text-xs text-gray-400 uppercase">
+              Finance
+            </div>
+
+            <Link
+              href="/accountants"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Accountants
+            </Link>
+
+            {/* Admission */}
+            <div className="mt-4 text-xs text-gray-400 uppercase">
+              Admission
+            </div>
+
+            <Link
+              href="/admission"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Admission Requests
+            </Link>
+
+            {/* Committee */}
+            <div className="mt-4 text-xs text-gray-400 uppercase">
+              Management
+            </div>
+
+            <Link
+              href="/committee"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Committee
+            </Link>
+
+            {/* Files */}
+            <div className="mt-4 text-xs text-gray-400 uppercase">
+              Resources
+            </div>
+
+            <Link
+              href="/pdf"
+              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
+            >
+              PDF Documents
+            </Link>
+
+          </nav>
         </aside>
 
         {/* CONTENT */}
