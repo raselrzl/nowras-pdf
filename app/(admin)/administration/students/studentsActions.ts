@@ -22,33 +22,25 @@ export async function createStudent(
     const section = formData.get("section") as string;
 
     if (!name || !email || !password) {
-      return { error: "Name, email, password are required" };
+      return { error: "Name, email, password required" };
     }
 
-    const exists = await prisma.user.findUnique({
+    // check duplicate student email
+    const exists = await prisma.student.findFirst({
       where: { email },
     });
 
     if (exists) {
-      return { error: "User already exists" };
+      return { error: "Student already exists" };
     }
 
     const hashed = await bcrypt.hash(password, 10);
 
-    // 1. Create User
-    const user = await prisma.user.create({
+    await prisma.student.create({
       data: {
         name,
         email,
         password: hashed,
-        role: "STUDENT",
-      },
-    });
-
-    // 2. Create Student profile
-    await prisma.student.create({
-      data: {
-        userId: user.id,
         roll,
         className,
         section,
@@ -60,4 +52,15 @@ export async function createStudent(
     console.error(err);
     return { error: "Something went wrong" };
   }
+}
+
+export async function getStudents() {
+  return prisma.student.findMany({
+    include: {
+      guardian: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 }

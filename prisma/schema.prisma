@@ -5,6 +5,8 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -14,15 +16,7 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  admin      Admin?
-  teacher    Teacher?
-  student    Student?
-  accountant Accountant?
-  guardian   Guardian?
-  committee  Committee?
 }
-
 
 enum Role {
   ADMIN
@@ -36,61 +30,60 @@ enum Role {
 }
 
 
-model Admin {
-  id     String @id @default(uuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-}
-
-
-model Teacher {
-  id        String @id @default(uuid())
-  userId    String @unique
-  user      User   @relation(fields: [userId], references: [id])
-
-  subject   String?
-  phone     String?
-  address   String?
-}
-
-
 model Student {
-  id         String @id @default(uuid())
-  userId     String @unique
-  user       User   @relation(fields: [userId], references: [id])
-
+  id         String   @id @default(uuid())
+  name       String
+  email      String?
+  password   String
   roll       String?
   className  String?
   section    String?
 
   guardianId String?
   guardian   Guardian? @relation(fields: [guardianId], references: [id])
+
+  createdAt  DateTime @default(now())
+}
+
+
+
+model Teacher {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  password  String
+  subject   String?
+  phone     String?
+  address   String?
+
+  createdAt DateTime @default(now())
 }
 
 
 model Guardian {
-  id        String @id @default(uuid())
-  userId    String @unique
-  user      User   @relation(fields: [userId], references: [id])
-
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  password  String
   phone     String?
-
   students  Student[]
+
+  createdAt DateTime @default(now())
 }
+
+
+
+
 
 
 model Accountant {
   id     String @id @default(uuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  name   String?
 }
-
 
 model Committee {
   id       String @id @default(uuid())
-  userId   String @unique
-  user     User   @relation(fields: [userId], references: [id])
-
+  name     String?
   position String?
 }
 
@@ -98,9 +91,7 @@ model Admission {
   id           String   @id @default(uuid())
   studentName  String
   email        String
-
   status       AdmissionStatus @default(PENDING)
-
   createdAt    DateTime @default(now())
 }
 
@@ -109,7 +100,6 @@ enum AdmissionStatus {
   APPROVED
   REJECTED
 }
-
 
 model Pdf {
   id        String   @id @default(cuid())

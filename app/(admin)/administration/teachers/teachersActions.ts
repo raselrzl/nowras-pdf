@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/app/utils/db";
-import bcrypt from "bcrypt";
 
 export type CreateTeacherState = {
   success?: boolean;
@@ -25,30 +24,19 @@ export async function createTeacher(
       return { error: "Name, email, password are required" };
     }
 
-    const exists = await prisma.user.findUnique({
+    const exists = await prisma.teacher.findFirst({
       where: { email },
     });
 
     if (exists) {
-      return { error: "User already exists" };
+      return { error: "Teacher already exists" };
     }
 
-    const hashed = await bcrypt.hash(password, 10);
-
-    // 1. Create user
-    const user = await prisma.user.create({
+    await prisma.teacher.create({
       data: {
         name,
         email,
-        password: hashed,
-        role: "TEACHER",
-      },
-    });
-
-    // 2. Create teacher profile
-    await prisma.teacher.create({
-      data: {
-        userId: user.id,
+        password,
         subject,
         phone,
         address,
@@ -57,7 +45,14 @@ export async function createTeacher(
 
     return { success: true };
   } catch (err) {
-    console.error(err);
     return { error: "Something went wrong" };
   }
+}
+
+export async function getTeachers() {
+  return prisma.teacher.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 }
