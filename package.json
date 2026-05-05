@@ -1,19 +1,19 @@
 {
-  "name": "sobur-pdf-uploader",
+  "name": "school",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate",
-    "build": "prisma generate && next build"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
     "@uploadthing/react": "^7.3.3",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "lucide-react": "^1.7.0",
     "next": "16.2.1",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

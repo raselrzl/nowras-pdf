@@ -5,6 +5,111 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  admin      Admin?
+  teacher    Teacher?
+  student    Student?
+  accountant Accountant?
+  guardian   Guardian?
+  committee  Committee?
+}
+
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  ACCOUNTANT
+  GUARDIAN
+  ADMISSION
+  COMMITTEE
+  USER
+}
+
+
+model Admin {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+
+model Teacher {
+  id        String @id @default(uuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id])
+
+  subject   String?
+  phone     String?
+  address   String?
+}
+
+
+model Student {
+  id         String @id @default(uuid())
+  userId     String @unique
+  user       User   @relation(fields: [userId], references: [id])
+
+  roll       String?
+  className  String?
+  section    String?
+
+  guardianId String?
+  guardian   Guardian? @relation(fields: [guardianId], references: [id])
+}
+
+
+model Guardian {
+  id        String @id @default(uuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id])
+
+  phone     String?
+
+  students  Student[]
+}
+
+
+model Accountant {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+
+model Committee {
+  id       String @id @default(uuid())
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id])
+
+  position String?
+}
+
+model Admission {
+  id           String   @id @default(uuid())
+  studentName  String
+  email        String
+
+  status       AdmissionStatus @default(PENDING)
+
+  createdAt    DateTime @default(now())
+}
+
+enum AdmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 
 model Pdf {
   id        String   @id @default(cuid())
