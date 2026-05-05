@@ -1,22 +1,45 @@
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default function CommitteeLayout({
+import LogoutButton from "@/app/components/logout-button";
+import { getCurrentUser } from "@/app/utils/auth";
+
+export default async function CommitteeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getCurrentUser();
+
+  // 🔐 NOT LOGGED IN
+  if (!user) {
+    redirect("/login");
+  }
+
+  // 🔐 ONLY COMMITTEE OR ADMIN
+  if (user.role !== "COMMITTEE" && user.role !== "ADMIN") {
+    redirect("/");
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
 
-      {/* TOP NAVBAR */}
+      {/* TOP BAR */}
       <header className="h-14 bg-white border-b flex items-center justify-between px-6">
-        <h1 className="font-semibold">Managing Committee</h1>
 
-        <button className="border px-3 py-1 rounded-xs hover:bg-gray-50">
-          Logout
-        </button>
+        <h1 className="font-semibold">Committee Panel</h1>
+
+        <div className="flex items-center gap-4 text-sm text-gray-600">
+          <span>
+            Welcome, <b className="text-black">{user.name}</b>
+          </span>
+
+          <LogoutButton />
+        </div>
+
       </header>
 
+      {/* BODY */}
       <div className="flex flex-1">
 
         {/* SIDEBAR */}
@@ -26,7 +49,7 @@ export default function CommitteeLayout({
             href="/administration/committee"
             className="bg-gray-800 px-3 py-2 rounded-xs hover:bg-gray-700"
           >
-            All Members
+            Committee Members
           </Link>
 
           <Link
@@ -35,10 +58,14 @@ export default function CommitteeLayout({
           >
             Add Member
           </Link>
+
         </aside>
 
         {/* CONTENT */}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6">
+          {children}
+        </main>
+
       </div>
     </div>
   );

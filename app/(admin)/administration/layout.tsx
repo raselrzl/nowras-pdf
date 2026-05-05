@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
+import Link from "next/link";
+
 import LogoutButton from "@/app/components/logout-button";
 import { getCurrentUser } from "@/app/utils/auth";
-import Link from "next/link";
 
 export default async function AdministrationLayout({
   children,
@@ -9,10 +11,20 @@ export default async function AdministrationLayout({
 }) {
   const user = await getCurrentUser();
 
+  // 🔐 NOT LOGGED IN
+  if (!user) {
+    redirect("/login");
+  }
+
+  // 🔐 ONLY ADMIN
+  if (user.role !== "ADMIN") {
+    redirect("/");
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
 
-      {/* TOP NAV */}
+      {/* ================= TOP NAV ================= */}
       <header className="h-14 bg-white border-b flex items-center justify-between px-6">
         <h1 className="font-semibold text-lg">
           School Administration
@@ -22,7 +34,7 @@ export default async function AdministrationLayout({
           <span className="text-gray-600">
             Welcome,{" "}
             <b className="text-black">
-              {user?.name || "Guest"}
+              {user.name || "Admin"}
             </b>
           </span>
 
@@ -30,10 +42,10 @@ export default async function AdministrationLayout({
         </div>
       </header>
 
-      {/* BODY */}
+      {/* ================= BODY ================= */}
       <div className="flex flex-1">
 
-        {/* SIDEBAR */}
+        {/* ================= SIDEBAR ================= */}
         <aside className="w-64 bg-gray-900 text-white p-4">
 
           <h2 className="text-lg font-semibold mb-4">
@@ -50,7 +62,7 @@ export default async function AdministrationLayout({
               Dashboard
             </Link>
 
-            {/* User Management */}
+            {/* Create User */}
             <Link
               href="/administration/createuser"
               className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
@@ -58,91 +70,26 @@ export default async function AdministrationLayout({
               Create User
             </Link>
 
+            {/* Students */}
             <Link
-              href="/administration/users"
-              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
-            >
-              All Users
-            </Link>
-
-            {/* Academic Management */}
-            <div className="mt-4 text-xs text-gray-400 uppercase">
-              Academic
-            </div>
-
-            <Link
-              href="/teachers"
-              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
-            >
-              Teachers
-            </Link>
-
-            <Link
-              href="/students"
+              href="/administration/students"
               className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
             >
               Students
             </Link>
 
+            {/* Teachers */}
             <Link
-              href="/guardians"
+              href="/administration/teachers"
               className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
             >
-              Guardians
-            </Link>
-
-            {/* Finance */}
-            <div className="mt-4 text-xs text-gray-400 uppercase">
-              Finance
-            </div>
-
-            <Link
-              href="/accountants"
-              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
-            >
-              Accountants
-            </Link>
-
-            {/* Admission */}
-            <div className="mt-4 text-xs text-gray-400 uppercase">
-              Admission
-            </div>
-
-            <Link
-              href="/admission"
-              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
-            >
-              Admission Requests
-            </Link>
-
-            {/* Committee */}
-            <div className="mt-4 text-xs text-gray-400 uppercase">
-              Management
-            </div>
-
-            <Link
-              href="/committee"
-              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
-            >
-              Committee
-            </Link>
-
-            {/* Files */}
-            <div className="mt-4 text-xs text-gray-400 uppercase">
-              Resources
-            </div>
-
-            <Link
-              href="/pdf"
-              className="bg-gray-800 px-3 py-2 rounded hover:bg-gray-700"
-            >
-              PDF Documents
+              Teachers
             </Link>
 
           </nav>
         </aside>
 
-        {/* CONTENT */}
+        {/* ================= CONTENT ================= */}
         <main className="flex-1 p-6">
           {children}
         </main>
