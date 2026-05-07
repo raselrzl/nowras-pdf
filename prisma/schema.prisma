@@ -6,7 +6,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -31,20 +30,129 @@ enum Role {
 
 
 model Student {
-  id         String   @id @default(uuid())
-  name       String
-  email      String?
-  password   String
-  roll       String?
-  className  String?
-  section    String?
+  id             String   @id @default(uuid())
+  registrationNo String   @unique
 
-  guardianId String?
-  guardian   Guardian? @relation(fields: [guardianId], references: [id])
+  name           String
+  email          String?
+  password       String
+
+  className      ClassName
+  section        Section
+  roll           String?
+
+  gender         Gender
+  dateOfBirth    DateTime?
+  phone          String?
+  address        String?
+
+  guardianId     String?
+  guardian       Guardian? @relation(fields: [guardianId], references: [id])
+
+  status         StudentStatus @default(ACTIVE)
+
+  fees           Fee[]
+  scholarships   Scholarship[]
+  attendances    Attendance[]
+
+  admissionDate  DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+
+model FeeStructure {
+  id        String   @id @default(uuid())
+
+  className ClassName
+  type      FeeType
+
+  amount    Float
+
+  createdAt DateTime @default(now())
+}
+
+
+model Fee {
+  id        String   @id @default(uuid())
+
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  type      FeeType
+
+  month     Int?
+  year      Int?
+
+  baseAmount     Float
+  discountAmount Float @default(0)
+  finalAmount    Float
+
+  status     FeeStatus @default(PENDING)
+
+  dueDate    DateTime?
+
+  payments   Payment[]
 
   createdAt  DateTime @default(now())
 }
 
+
+model Payment {
+  id        String   @id @default(uuid())
+
+  feeId     String
+  fee       Fee      @relation(fields: [feeId], references: [id])
+
+  amount    Float
+  method    PaymentMethod
+  note      String?
+
+  paidAt    DateTime @default(now())
+}
+
+
+model Scholarship {
+  id        String   @id @default(uuid())
+
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  type      ScholarshipType
+  value     Float
+
+  startDate DateTime
+  endDate   DateTime?
+
+  createdAt DateTime @default(now())
+}
+
+
+model Attendance {
+  id        String   @id @default(uuid())
+
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  date      DateTime
+  status    AttendanceStatus
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, date])
+}
+
+model Guardian {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  password  String
+  phone     String?
+
+  students  Student[]
+
+  createdAt DateTime @default(now())
+}
 
 
 model Teacher {
@@ -58,23 +166,6 @@ model Teacher {
 
   createdAt DateTime @default(now())
 }
-
-
-model Guardian {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  password  String
-  phone     String?
-  students  Student[]
-
-  createdAt DateTime @default(now())
-}
-
-
-
-
-
 
 model Accountant {
   id     String @id @default(uuid())
@@ -95,15 +186,87 @@ model Admission {
   createdAt    DateTime @default(now())
 }
 
-enum AdmissionStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
 model Pdf {
   id        String   @id @default(cuid())
   name      String
   url       String
   createdAt DateTime @default(now())
 }
+
+enum FeeType {
+  TUITION
+  REGISTRATION
+  ADMISSION
+  EXAM
+  OTHER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum FeeStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+enum PaymentMethod {
+  CASH
+  BKASH
+  NAGAD
+  BANK
+}
+
+enum ScholarshipType {
+  PERCENTAGE
+  FIXED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+}
+
+enum StudentStatus {
+  ACTIVE
+  FAIL
+  INACTIVE
+  COMPLETED
+  TRANSFERES
+  SUSPENDED
+}
+
+enum ClassName {
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+  SIX
+  SEVEN
+  EIGHT
+  NINE
+  TEN
+  ELEVEN
+  TWELVE
+}
+
+enum Section {
+  A
+  B
+  C
+  D
+}
+
+enum AdmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+

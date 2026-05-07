@@ -8,6 +8,11 @@ export type CreateStudentState = {
   error?: string;
 };
 
+function generateRegistrationNo() {
+  const random = Math.floor(100000 + Math.random() * 900000);
+  return `STU-${random}`;
+}
+
 export async function createStudent(
   prevState: CreateStudentState,
   formData: FormData
@@ -17,33 +22,55 @@ export async function createStudent(
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
+    const className = formData.get("className") as any;
+    const section = formData.get("section") as any;
     const roll = formData.get("roll") as string;
-    const className = formData.get("className") as string;
-    const section = formData.get("section") as string;
 
-    if (!name || !email || !password) {
-      return { error: "Name, email, password required" };
+    const gender = formData.get("gender") as any;
+    const dateOfBirthRaw = formData.get("dateOfBirth") as string;
+    const phone = formData.get("phone") as string;
+    const address = formData.get("address") as string;
+    const guardianId = formData.get("guardianId") as string;
+
+    // validation
+    if (!name || !password || !className || !section) {
+      return { error: "Required fields missing" };
     }
 
-    // check duplicate student email
+    // duplicate email check (student level)
     const exists = await prisma.student.findFirst({
       where: { email },
     });
 
-    if (exists) {
-      return { error: "Student already exists" };
+    if (exists && email) {
+      return { error: "Student with this email already exists" };
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const dateOfBirth = dateOfBirthRaw
+      ? new Date(dateOfBirthRaw)
+      : null;
 
     await prisma.student.create({
       data: {
+        registrationNo: generateRegistrationNo(),
+
         name,
-        email,
-        password: hashed,
-        roll,
+        email: email || null,
+        password: hashedPassword,
+
         className,
         section,
+        roll: roll || null,
+
+        gender: gender || null,
+        dateOfBirth,
+
+        phone: phone || null,
+        address: address || null,
+
+        guardianId: guardianId || null,
       },
     });
 
@@ -54,13 +81,9 @@ export async function createStudent(
   }
 }
 
+
 export async function getStudents() {
   return prisma.student.findMany({
-    include: {
-      guardian: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: { createdAt: "desc" },
   });
 }
